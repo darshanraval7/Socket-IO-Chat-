@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <style>
+   * { box-sizing: border-box;}
+    
+.container_form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 6px;
+        height: 440px;
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+input[type=text], select, textarea {
+      width: 10%;
+      padding: 12px;
+      border: 2px solid #ccc;
+       border-radius: 25px;
+       box-sizing: border-box;
+        margin-top: 8px;
+        margin-right: 244px; 
+        margin-bottom: 16px;
+       resize: vertical;
+}
+input[type=email], select, textarea {
+      width: 10%;
+      padding: 12px;
+      border: 2px solid #ccc;
+       border-radius: 25px;
+       box-sizing: border-box;
+        margin-top: 8px;
+        margin-right: 212px; 
+        margin-bottom: 16px;
+       resize: vertical;
+}
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 1px;
+    height: 87px;
+}
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin-right: 161px;
+    border-radius: 25px;
+    border: none;
+      
+    cursor: pointer;
+}
+  </style>
+</head>
+<body>
+<!-- <img src="imageedit_6_65831649221.gif" align="center"> -->
+<div class="container">
+  <h1 align="center"><img src="3-cards.png"  width="50" height="50" border-radius ="50%">  Wel Come to 3 Cards Game</h1>
+</div>
+
+<!-- NavBar -->
+<div class="topnav">
+  <a class="active" href="http://192.168.0.102:3000">Home</a>
+  <a href="http://192.168.0.102:3000/how_to_play">How to Play</a>
+  <a href="http://192.168.0.102:3000/register_page">Register</a>
+  <a href="http://192.168.0.102:3000/login">Join Room</a>
+  <a href="http://192.168.0.102:3000/login">Login</a>
+  
+</div>
+<div align="center" class="container_form" id="account_div">
+      <h1>Create Account</h1> <hr>
+        Name :<input type="text" id="name"  placeholder="Your name" required><br>
+        Email :<input type="email" id="email" placeholder="Email" required><br>
+        Mobile No :<input type="text" id="mobileno" placeholder="Mobile No" pattern="[789][0-9]{9}" required ><br>
+        Password : <input type="text" id="password" placeholder="Password" required><br>
+      <input type="submit" value="Create Account" id="account_button"></a>
+    </div>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    <script>      
+      $(function () {
+        var socket = io('http://192.168.0.102:3000'); // http://192.168.0.102:3000/ - mama
+        
+        $('#account_button').click(function(){
+             var obj = {
+                 name : $('#name').val(),
+                 email : $('#email').val(),
+                 mobileno : $('#mobileno').val(),
+                 password : $('#password').val()
+             };
+            console.log("Obj Send :",obj);
+            socket.emit('register_function',obj);
+          });
+      socket.on('redirect', function(msg){
+          window.location.href = "http://192.168.0.102:3000/login";
+        });
+      
+        });
+    </script>
+</body>
+</html>

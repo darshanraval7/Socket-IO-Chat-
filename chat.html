@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GroupChat App</title>
+    <style>
+      * { box-sizing: border-box;}
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+      input[type=text], select, textarea {
+      width: 10%;
+      padding: 12px;
+      border: 2px solid #ccc;
+       border-radius: 25px;
+       box-sizing: border-box;
+        margin-top: 8px;
+        margin-right: 171px; 
+        margin-bottom: 16px;
+       resize: vertical;
+}
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.container_logout {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin-right: 161px;
+    border-radius: 25px;
+    border: none;
+      
+    cursor: pointer;
+}
+    </style>
+  </head>
+  <body>
+
+    <!-- Basic Form -->
+    <div align="center" class="container" id="join_div">
+      <h1>Welcome to GroupChat App</h1> <hr><br><br>
+        Name :<input type="text" id="name"  placeholder="Your name"/><br>
+        Room :<input type="text" id="room" placeholder="Room Id"/><br>
+      <input type="submit" value="join room" id="join_button">
+    </div>
+
+    <!-- Leave Button -->
+    <div align="right" class="container" id="leave_div">
+       <input type="submit" value="Leave Room" id="leave_button">
+    </div>
+
+    <!-- Logout Button -->
+    <div align="right" class="container_logout" id="logout_div">
+       <input type="submit" value="Logout" id="logout_button">
+    </div>
+    <!-- Button Contact Us -->
+    <!-- <div align="right" class="container" id="contact_div">
+       <input type="submit" value="Contact Us" id="contact_button">
+       <p>This is a paragraph with little content.</p>
+    </div> -->
+
+    <!--  -->
+    <ul id="messages"></ul>
+    <div id="chat_div">
+      <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    </div>
+    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    <script>
+      $(function () {
+        var socket = io('http://192.168.0.102:3000'); // http://192.168.0.102:3000/ - mama
+        
+        /*Text Box Animation*/
+        $("input").focus(function(){
+        $(this).css("background-color", "#bceda3");
+          });
+        $("input").blur(function(){
+        $(this).css("background-color", "#ffffff");
+          });
+
+
+        /*Toggle Animation*/
+        /*$("#contact_div").click(function(){
+        $("p:first").toggle();
+        });*/
+
+        /*Text Animation*/
+        $("h1").on({
+        mouseenter: function(){
+            $(this).css("color", "lightblue");
+        },  
+        mouseleave: function(){
+            $(this).css("color", "black");
+          }, 
+        });
+
+
+
+
+         $('#leave_div').hide();
+         $('#chat_div').hide();
+         $('#join_button').click(function(){
+             var obj = {
+                 name : $('#name').val(),
+                 room : $('#room').val()
+             };
+            console.log("Obj Send :",obj);
+            socket.emit('join_room',obj);  
+            $('#join_div').hide();
+            $('#chat_div').show();
+            $('#leave_div').show(); 
+            
+          
+
+         });   
+
+          $('#leave_button').click(function(){
+            socket.emit('leave_room','hi');
+              $('#join_div').show();
+            $('#chat_div').hide();
+            $('#leave_div').hide(); 
+
+          });
+          $('#logout_button').click(function(){
+            socket.emit('logout','hi');
+              
+          });
+        
+        socket.on('redirect_leave_room', function(msg){
+          window.location.href = "http://192.168.0.102:3000/chat";
+        });
+
+        socket.on('redirect_logout', function(msg){
+          window.location.href = "http://192.168.0.102:3000";
+        });
+
+        $('form').submit(function(){
+          socket.emit('send_msg', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('msg_broadcast', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+        socket.on('broadcast', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+          exit;
+        });
+      });
+    </script>
+  </body>
+</html>

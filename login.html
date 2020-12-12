@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<style>
+		.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+.container_form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+        height: 400px;
+}
+
+input[type=text], select, textarea {
+      width: 10%;
+      padding: 12px;
+      border: 2px solid #ccc;
+       border-radius: 25px;
+       box-sizing: border-box;
+        margin-top: 8px;
+        margin-right: 171px; 
+        margin-bottom: 16px;
+       resize: vertical;
+}
+input[type=password], select, textarea {
+      width: 10%;
+      padding: 12px;
+      border: 2px solid #ccc;
+       border-radius: 25px;
+       box-sizing: border-box;
+        margin-top: 8px;
+        margin-right: 171px; 
+        margin-bottom: 16px;
+       resize: vertical;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin-right: 141px;
+    border-radius: 25px;
+    border: none;
+      
+    cursor: pointer;
+}
+	</style>
+</head>
+<body>
+
+<div class="container">
+	<h1 align="center"><img src="3-cards.png" width="50" height="50" border-radius ="50%">  Wel Come to 3 Cards Game</h1>
+</div>
+
+<!-- NavBar -->
+<div class="topnav">
+  <a class="active" href="http://192.168.0.102:3000">Home</a>
+  <a href="http://192.168.0.102:3000/how_to_play">How to Play</a>
+  <a href="http://192.168.0.102:3000/register_page">Register</a>
+  <a href="http://192.168.0.102:3000/login">Join Room</a>
+  <a href="http://192.168.0.102:3000/login">Login</a>
+  
+</div>
+
+
+<div class="container_form" align="center" id="login_div">
+	<h1>Create Account</h1> <hr>
+      Username : <input type="text" id="login_name"  placeholder="username" required><br>
+      Password : <input type="password" id="login_password"  placeholder="password" required><br>
+      <input type="submit" value="Login" id="login_button"></a>
+  </div>
+   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    <script>
+      $(function () {
+        var socket = io('http://192.168.0.102:3000'); // http://192.168.0.102:3000/ - mama
+        
+         $('#login_button').click(function(){
+             var obj = {
+                 username : $('#login_name').val(),
+                 password : $('#login_password').val()
+             };
+            console.log("Obj Send :",obj);
+            socket.emit('authentication',obj);  
+         }); 
+         socket.on('redirect', function(msg){
+          window.location.href = "http://192.168.0.102:3000/register_page";
+        });  
+         socket.on('redirect_to_chat', function(msg){
+          window.location.href = "http://192.168.0.102:3000/chat";
+        });
+      });
+    </script>
+<script> 
+
+
+
+</body>
+</html>
+
+
